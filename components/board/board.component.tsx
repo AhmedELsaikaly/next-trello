@@ -6,11 +6,14 @@ import { default as ColumnComp } from '../column/column.component';
 import { Column } from '@/typings';
 
 const Board = () => {
-  const [getBoard, board, setBoardState] = useBoardStore((state) => [
-    state.getBoard,
-    state.board,
-    state.setBoardState,
-  ]);
+  const [getBoard, board, setBoardState, updateTodoInDB] = useBoardStore(
+    (state) => [
+      state.getBoard,
+      state.board,
+      state.setBoardState,
+      state.updateTodoInDB,
+    ]
+  );
   useEffect(() => {
     getBoard();
   }, [getBoard]);
@@ -69,6 +72,9 @@ const Board = () => {
         id: finishCol.id,
         todos: finishTodos,
       });
+      // update in databse
+      updateTodoInDB(todoMoved, finishCol.id);
+
       setBoardState({ ...board, columns: newColumns });
     }
   };

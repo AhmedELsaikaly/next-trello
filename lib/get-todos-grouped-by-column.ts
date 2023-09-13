@@ -34,11 +34,11 @@ export const getTodosGroupedByColumn = async () => {
     }
   }
   // sort columns by columnTypes
-  Array.from(columns.entries()).sort(
+  const finalSortedColumns = Array.from(columns.entries()).sort(
     (a, b) => columnTypes.indexOf(a[0]) - columnTypes.indexOf(b[0])
   );
   const board: Board = {
-    columns,
+    columns: new Map(finalSortedColumns),
   };
   return board;
 };
