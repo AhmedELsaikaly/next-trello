@@ -6,7 +6,6 @@ export default function Home() {
       {/* header */}
       <Header />
       {/* Board */}
-      <h1>Trello 2.0 AI Clone</h1>
       <Board />
     </main>
   );

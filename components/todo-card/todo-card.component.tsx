@@ -1,12 +1,15 @@
+'use client';
+import { useState, useEffect } from 'react';
 import { useBoardStore } from '@/store';
-import { Todo, TypedColumn } from '@/typings';
+import { Image, Todo, TypedColumn } from '@/typings';
 import { XCircleIcon } from '@heroicons/react/20/solid';
-import Image from 'next/image';
-import React from 'react';
+import { default as NextImage } from 'next/image';
+
 import {
   DraggableProvidedDragHandleProps,
   DraggableProvidedDraggableProps,
 } from 'react-beautiful-dnd';
+import getUrl from '@/lib/get-url';
 
 type TodoCardProps = {
   todo: Todo;
@@ -26,6 +29,18 @@ const TodoCard = ({
   dragHandleProps,
 }: TodoCardProps) => {
   const { deleteTask } = useBoardStore();
+  const [imageUrl, setImageUrl] = useState<string | null>();
+
+  useEffect(() => {
+    if (todo.image) {
+      const fetchImage = async () => {
+        const url = await getUrl(todo.image as Image);
+        setImageUrl(url.toString());
+      };
+      fetchImage();
+    }
+  }, []);
+
   return (
     <div
       className='bg-white rounded-md space-y-2 drop-shadow-md'
@@ -42,7 +57,17 @@ const TodoCard = ({
           <XCircleIcon className='ml-5 h-8 w-8' />
         </button>
       </div>
-      {/* {todo?.image && <Image src={todo.image} alt={todo.title} />} */}
+      {imageUrl && (
+        <div className='w-full rounded-b-md h-[400px] overflow-hidden'>
+          <NextImage
+            width={400}
+            height={200}
+            src={imageUrl}
+            alt={todo.title}
+            className='w-full object-contain rounded-b-md'
+          />
+        </div>
+      )}
     </div>
   );
 };
